@@ -5,25 +5,6 @@ import "flatpickr/dist/flatpickr.min.css";
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-function getElement(selector) {
-    return document.querySelector(selector);
-}
-
-function startTimer() {
-    startButtonRef.disabled = true;
-
-    setInterval(updateTimer, 1000);
-}
-
-function updateTimer() {
-    let { days, hours, minutes, seconds } = convertMs(selectedDate - Date.now());
-
-    getElement('[data-days]').textContent = addLeadingZero(days);
-    getElement('[data-hours]').textContent = addLeadingZero(hours);
-    getElement('[data-minutes]').textContent = addLeadingZero(minutes);
-    getElement('[data-seconds]').textContent = addLeadingZero(seconds);
-}
-
 function convertMs(ms) {
     // Number of milliseconds per unit of time
     const second = 1000;
@@ -44,13 +25,43 @@ function convertMs(ms) {
 }
 
 function addLeadingZero(value) {
-    return String(value).padStart(2, 0);
+    return value >= 0 ? String(value).padStart(2, '0') : '00';
+}
+
+function getElement(selector) {
+    return document.querySelector(selector);
+}
+
+function startTimer() {
+    startButtonRef.disabled = true;
+
+    intervalID = setInterval(updateTimer, 1000);
+}
+
+function stopTimer() {
+    clearInterval(intervalID);
+    intervalID = null;
+}
+
+function updateTimer() {
+    let { days, hours, minutes, seconds } = convertMs(selectedDate - Date.now());
+
+    getElement('[data-days]').textContent = addLeadingZero(days);
+    getElement('[data-hours]').textContent = addLeadingZero(hours);
+    getElement('[data-minutes]').textContent = addLeadingZero(minutes);
+    getElement('[data-seconds]').textContent = addLeadingZero(seconds);
+
+    if (Date.now() - selectedDate > 0) {
+        Notify.success("BOOM!!!");
+        stopTimer();
+    }
 }
 
 let startButtonRef = getElement("[data-start]");
 startButtonRef.disabled = true;
 
 let selectedDate = null;
+let intervalID = null;
 
 const options = {
     enableTime: true,
@@ -64,6 +75,10 @@ const options = {
             startButtonRef.disabled = true;
 
             return;
+        };
+
+        if (intervalID) {
+            stopTimer();
         };
 
         selectedDate = selectedDates[0];
