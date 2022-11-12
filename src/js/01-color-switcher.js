@@ -1,5 +1,5 @@
 let startButtonRef = getElement('[data-start]');
-let intervalID;
+let intervalID = null;
 
 function getElement(selector) {
     return document.querySelector(selector);
@@ -9,7 +9,7 @@ function setClickListener(selector, intervalFunction) {
     return getElement(selector).addEventListener("click", intervalFunction);
 }
 
-function setButtonDisabled() {
+function changeButtonDisabled() {
     startButtonRef.disabled = !startButtonRef.disabled;
 }
 
@@ -22,7 +22,7 @@ function setBackgroundColor() {
 }
 
 function startInterval() {
-    setButtonDisabled();
+    changeButtonDisabled();
 
     intervalID = setInterval(setBackgroundColor, 1000);
 }
@@ -32,7 +32,7 @@ function stopInterval() {
         return;
     };
 
-    setButtonDisabled();
+    changeButtonDisabled();
 
     clearInterval(intervalID);
 }
