@@ -83,6 +83,8 @@ const options = {
 
         selectedDate = selectedDates[0];
         startButtonRef.disabled = false;
+
+        updateTimer();
     },
 };
 
