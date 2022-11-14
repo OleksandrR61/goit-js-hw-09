@@ -9,7 +9,7 @@ function onSubmit(event) {
 
   delay = Number.parseInt(delay);
 
-  for (i = 1; i <= amount; i += 1, delay += Number.parseInt(step)) {
+  for (let i = 1; i <= amount; i += 1, delay += Number.parseInt(step)) {
     createPromise(i, delay)
     .then(({ position, delay }) => {
       Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
