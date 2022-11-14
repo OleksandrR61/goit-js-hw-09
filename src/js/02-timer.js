@@ -38,7 +38,7 @@ let intervalID = null;
 
 startButtonRef.addEventListener('click', startTimer);
 
-Notify.warning("To set the detonator timer, select the detonation date and move to a safe distance. If you do not have time to move to a safe distance, just set a new date.", {messageMaxLength: 200, position: 'center-top', timeout: 30000});
+Notify.info("To set the detonator timer, select the detonation date and move to a safe distance. If you do not have time to move to a safe distance, just set a new date.", {messageMaxLength: 200, position: 'center-top', timeout: 30000});
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
