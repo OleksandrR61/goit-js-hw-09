@@ -1,9 +1,44 @@
-// Описан в документации
 import flatpickr from "flatpickr";
-// Дополнительный импорт стилей
 import "flatpickr/dist/flatpickr.min.css";
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+const options = {
+    enableTime: true,
+    time_24hr: true,
+    defaultDate: new Date(),
+    minuteIncrement: 1,
+    onClose(selectedDates) {
+        if (Date.now() - selectedDates[0] > 0) {
+            Notify.failure("Please choose a date in the future");
+
+            startButtonRef.disabled = true;
+
+            return;
+        };
+
+        if (intervalID) {
+            stopTimer();
+        };
+
+        selectedDate = selectedDates[0];
+        startButtonRef.disabled = false;
+
+        updateTimer();
+    },
+};
+
+const fp = flatpickr("#datetime-picker", options);
+
+let startButtonRef = getElement("[data-start]");
+startButtonRef.disabled = true;
+
+let selectedDate = null;
+let intervalID = null;
+
+startButtonRef.addEventListener('click', startTimer);
+
+Notify.warning("To set the detonator timer, select the detonation date and move to a safe distance. If you do not have time to move to a safe distance, just set a new date.", {messageMaxLength: 200, position: 'center-top', timeout: 30000});
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -56,38 +91,3 @@ function updateTimer() {
         stopTimer();
     }
 }
-
-let startButtonRef = getElement("[data-start]");
-startButtonRef.disabled = true;
-
-let selectedDate = null;
-let intervalID = null;
-
-const options = {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-        if (Date.now() - selectedDates[0] > 0) {
-            Notify.failure("Please choose a date in the future");
-
-            startButtonRef.disabled = true;
-
-            return;
-        };
-
-        if (intervalID) {
-            stopTimer();
-        };
-
-        selectedDate = selectedDates[0];
-        startButtonRef.disabled = false;
-
-        updateTimer();
-    },
-};
-
-const fp = flatpickr("#datetime-picker", options);
-
-startButtonRef.addEventListener('click', startTimer);

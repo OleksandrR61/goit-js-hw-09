@@ -1,6 +1,9 @@
 let startButtonRef = getElement('[data-start]');
 let intervalID = null;
 
+setClickListener('[data-start]', startInterval);
+setClickListener('[data-stop]', stopInterval);
+
 function getElement(selector) {
     return document.querySelector(selector);
 }
@@ -36,6 +39,3 @@ function stopInterval() {
 
     clearInterval(intervalID);
 }
-
-setClickListener('[data-start]', startInterval);
-setClickListener('[data-stop]', stopInterval);
